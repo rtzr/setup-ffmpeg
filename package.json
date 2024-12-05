@@ -40,7 +40,8 @@
     "@actions/exec": "^1.1.1",
     "@actions/tool-cache": "^2.0.1",
     "semver": "^7.5.4",
-    "undici": "^6.0.1",
+    "undici": "^6.19.8",
     "uuid": "^9.0.1"
-  }
+  },
+  "packageManager": "pnpm@8.6.1+sha512.3f9e23f20bdbf7a27b87b804383f1dafdb5cb35cdc40fce590aff2215255446ff595878ee4f33429e6a0e7c3882b1ae926514f6fea6a5ba75e52f87bfc2592e7"
 }

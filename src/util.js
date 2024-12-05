@@ -12,6 +12,9 @@ export function getTempDir() {
   return process.env['RUNNER_TEMP'] || os.tmpdir();
 }
 
+import {fetch} from 'undici';
+
+
 /**
  * Normalizes a version string loosely in the format `X.X.X-abc` (version may
  * not contain all of these parts) to a valid semver version.
@@ -47,4 +50,20 @@ export function normalizeVersion(version, isGitRelease) {
 export function cleanVersion(version) {
   const clean = semver.clean(version);
   return (clean && clean.replace(/\.0+$/, '')) || version;
+}
+
+export function fetchWithRetry(url, options, retries = 3) {
+  return new Promise(async (resolve, reject) => {
+    let lastError;
+    for (let i = 0; i < retries; i++) {
+      try {
+        const res = await fetchWithRetry(url, options);
+        if (res.ok) return resolve(res);
+        lastError = new Error(`HTTP ${res.status} ${res.statusText}`);
+      } catch (error) {
+        lastError = error;
+      }
+    }
+    reject(lastError);
+  });
 }

@@ -2,9 +2,8 @@ import * as assert from 'assert';
 
 import * as tc from '@actions/tool-cache';
 import * as core from '@actions/core';
-import {fetch} from 'undici';
 
-import {USER_AGENT, cleanVersion, normalizeVersion} from '../util';
+import {USER_AGENT, cleanVersion, normalizeVersion, fetchWithRetry} from '../util';
 import {readdir} from 'fs/promises';
 import * as path from 'path';
 
@@ -28,7 +27,7 @@ export class JohnVanSickleInstaller {
     const url = isGitBuild
       ? 'https://johnvansickle.com/ffmpeg/git-readme.txt'
       : 'https://johnvansickle.com/ffmpeg/release-readme.txt';
-    const res = await fetch(url, {
+    const res = await fetchWithRetry(url, {
       headers: {
         'user-agent': USER_AGENT,
       },
@@ -61,13 +60,13 @@ export class JohnVanSickleInstaller {
       },
       redirect: 'manual',
     };
-    let res = await fetch(
+    let res = await fetchWithRetry(
       `https://johnvansickle.com/ffmpeg/releases/ffmpeg-${version}-${this.getArch()}-static.tar.xz`,
       init,
     );
     // Check in old releases if not available
     if (!res.ok) {
-      res = await fetch(
+      res = await fetchWithRetry(
         `https://johnvansickle.com/ffmpeg/old-releases/ffmpeg-${version}-${this.getArch()}-static.tar.xz`,
         init,
       );
@@ -101,7 +100,7 @@ export class JohnVanSickleInstaller {
   //  */
   // async verifyChecksum(release, archivePath) {
   //   if (this.skipIntegrityCheck || !release.checksumUrl) return true;
-  //   const res = await fetch(release.checksumUrl, {
+  //   const res = await fetchWithRetry(release.checksumUrl, {
   //     headers: {
   //       'user-agent': USER_AGENT,
   //     },

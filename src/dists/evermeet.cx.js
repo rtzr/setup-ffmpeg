@@ -3,10 +3,9 @@ import * as path from 'path';
 import {mkdir, rename} from 'fs/promises';
 
 import * as tc from '@actions/tool-cache';
-import {fetch} from 'undici';
 import {v4 as uuidV4} from 'uuid';
 
-import {USER_AGENT, cleanVersion, getTempDir} from '../util';
+import {USER_AGENT, cleanVersion, getTempDir, fetchWithRetry} from '../util';
 
 export class EvermeetCxInstaller {
   /**
@@ -23,7 +22,7 @@ export class EvermeetCxInstaller {
    * @private
    */
   async getVersionAndUrls(url) {
-    const res = await fetch(url, {
+    const res = await fetchWithRetry(url, {
       headers: {
         'user-agent': USER_AGENT,
       },
