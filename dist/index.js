@@ -32136,7 +32136,7 @@ __webpack_unused_export__ = setGlobalDispatcher
 __webpack_unused_export__ = getGlobalDispatcher
 
 const fetchImpl = (__nccwpck_require__(730).fetch)
-__webpack_unused_export__ = async function fetch (init, options = undefined) {
+module.exports.he = async function fetch (init, options = undefined) {
   try {
     return await fetchImpl(init, options)
   } catch (err) {
@@ -62243,7 +62243,7 @@ function fetchWithRetry(url, options, retries = 3) {
     let lastError;
     for (let i = 0; i < retries; i++) {
       try {
-        const res = await fetchWithRetry(url, options);
+        const res = await (0,undici/* fetch */.he)(url, options);
         if (res.ok) return resolve(res);
         lastError = new Error(`HTTP ${res.status} ${res.statusText}`);
       } catch (error) {

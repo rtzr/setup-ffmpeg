@@ -57,7 +57,7 @@ export function fetchWithRetry(url, options, retries = 3) {
     let lastError;
     for (let i = 0; i < retries; i++) {
       try {
-        const res = await fetchWithRetry(url, options);
+        const res = await fetch(url, options);
         if (res.ok) return resolve(res);
         lastError = new Error(`HTTP ${res.status} ${res.statusText}`);
       } catch (error) {
